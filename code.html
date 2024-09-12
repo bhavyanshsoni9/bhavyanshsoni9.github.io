@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Showcase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>My Projects</h1>
+    </header>
+    <main>
+        <section id="projects">
+            <h2>Project 1</h2>
+            <pre><code>import cv2
+                import face_recognition
+                import sqlite3
+                import os
+                
+                # Initialize the attendance database
+                def initialize_attendance(student_ids):
+                    if not os.path.exists('attendance.db'):
+                        conn = sqlite3.connect('attendance.db')
+                        c = conn.cursor()
+                        c.execute('''CREATE TABLE IF NOT EXISTS attendance
+                                     (student_id TEXT, date TEXT, status TEXT)''')
+                        # Insert all student IDs with status 'Absent' for today
+                        for student_id in student_ids:
+                            c.execute('''INSERT INTO attendance (student_id, date, status)
+                                         SELECT ?, datetime('now'), 'Absent'
+                                         WHERE NOT EXISTS (
+                                             SELECT 1 FROM attendance 
+                                             WHERE student_id = ? AND date = datetime('now')
+                                         )''', (student_id, student_id))
+                        conn.commit()
+                        conn.close()
+                        print("Attendance database initialized.")
+                
+                # Capture student images
+                def capture_student_images(student_id):
+                    if not os.path.exists('student_images'):
+                        os.makedirs('student_images')
+                
+                    video_capture = cv2.VideoCapture(0)
+                    
+                    print(f"Capturing images for student ID: {student_id}. Press 'q' to stop.")
+                    
+                    while True:
+                        ret, frame = video_capture.read()
+                        
+                        if not ret:
+                            print("Failed to grab frame")
+                            break
+                        
+                        rgb_frame = frame[:, :, ::-1]
+                        
+                        face_locations = face_recognition.face_locations(rgb_frame)
+                        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+                        
+                        for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+                            cv2.imwrite(f'student_images/{student_id}.jpg', frame)
+                            print(f"Saved image for student ID: {student_id}")
+                        
+                        cv2.imshow('Video', frame)
+                        
+                        if cv2.waitKey(1) & 0xFF == ord('q'):
+                            break
+                    
+                    video_capture.release()
+                    cv2.destroyAllWindows()
+                
+                # Load student images for face recognition
+                def load_student_images():
+                    student_images = {}
+                    for file in os.listdir('student_images'):
+                        if file.endswith('.jpg'):
+                            student_id = file.split('.')[0]
+                            image = face_recognition.load_image_file(f'student_images/{file}')
+                            encoding = face_recognition.face_encodings(image)[0]
+                            student_images[student_id] = encoding
+                    return student_images
+                
+                # Mark attendance in the database
+                def mark_attendance(student_id, status='Present'):
+                    conn = sqlite3.connect('attendance.db')
+                    c = conn.cursor()
+                    c.execute('''UPDATE attendance 
+                                 SET status = ? 
+                                 WHERE student_id = ? AND date = datetime('now')''', (status, student_id))
+                    conn.commit()
+                    conn.close()
+                    print(f"Marked {status} for student ID: {student_id}")
+                
+                # Recognize faces and update attendance
+                def recognize_faces():
+                    student_images = load_student_images()
+                    recognized_students = set()
+                    
+                    video_capture = cv2.VideoCapture(0)
+                    
+                    print("Starting face recognition. Press 'q' to stop.")
+                    
+                    while True:
+                        ret, frame = video_capture.read()
+                        
+                        if not ret:
+                            print("Failed to grab frame")
+                            break
+                        
+                        rgb_frame = frame[:, :, ::-1]
+                        
+                        face_locations = face_recognition.face_locations(rgb_frame)
+                        face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+                        
+                        for face_encoding in face_encodings:
+                            matches = face_recognition.compare_faces(list(student_images.values()), face_encoding)
+                            if True in matches:
+                                matched_id = list(student_images.keys())[matches.index(True)]
+                                mark_attendance(matched_id)
+                                recognized_students.add(matched_id)
+                        
+                        cv2.imshow('Video', frame)
+                        
+                        if cv2.waitKey(1) & 0xFF == ord('q'):
+                            break
+                    
+                    video_capture.release()
+                    cv2.destroyAllWindows()
+                    
+                    # Mark absent for students who were not recognized
+                    conn = sqlite3.connect('attendance.db')
+                    c = conn.cursor()
+                    c.execute('''SELECT DISTINCT student_id FROM attendance WHERE date = datetime('now') AND status = 'Absent' ''')
+                    all_students = set([row[0] for row in c.fetchall()])
+                    conn.close()
+                
+                    for student_id in all_students - recognized_students:
+                        mark_attendance(student_id, 'Absent')
+                
+                    # Save attendance to a text file
+                    save_attendance_to_file()
+                
+                # Save attendance records to a text file
+                def save_attendance_to_file():
+                    conn = sqlite3.connect('attendance.db')
+                    c = conn.cursor()
+                    c.execute('''SELECT student_id, date, status FROM attendance WHERE date = datetime('now')''')
+                    rows = c.fetchall()
+                    conn.close()
+                
+                    with open('attendance_report.txt', 'w') as f:
+                        f.write(f"{'Student ID':<15}{'Date':<20}{'Status':<10}\n")
+                        f.write('-' * 45 + '\n')
+                        for row in rows:
+                            f.write(f"{row[0]:<15}{row[1]:<20}{row[2]:<10}\n")
+                
+                    print("Attendance report saved to 'attendance_report.txt'.")
+                
+                # Example usage
+                if __name__ == "__main__":
+                    # Example student IDs (should be set according to your actual student list)
+                    student_ids = ['student_01', 'student_02', 'student_03']
+                    
+                    # Initialize the attendance system
+                    initialize_attendance(student_ids)
+                    
+                    # Capture images for each student (uncomment if needed)
+                    # capture_student_images('student_01')
+                    # capture_student_images('student_02')
+                    # capture_student_images('student_03')
+                    
+                    # Recognize faces and update attendance
+                    recognize_faces()
+                </code></pre>
+        </section>
+        <!-- Add more projects similarly -->
+        <section>
+            <h2>PowerPoint Project images</h2>
+       
+            <img src="Project Image/Image -  1.PNG" alt="Image - 1">
+            <img src="Project Image/Image -  2.PNG" alt="Image - 2">
+            <img src="Project Image/Image -  3.PNG" alt="Image - 3">
+            <img src="Project Image/Image -  4.PNG" alt="Image - 4">
+            <img src="Project Image/Image -  5.PNG" alt="Image - 5">
+            <img src="Project Image/Image -  6.PNG" alt="Image - 6">
+            <img src="Project Image/Image -  7.PNG" alt="Image - 7">
+           
+        <ol>
+            <li>
+            <a href="Project Image/Image -  1.PNG" download>Download Image - 1 </a>
+            <a href="Project Image/Image -  2.PNG" download>Download Image - 2 </a>
+            <a href="Project Image/Image -  3.PNG" download>Download Image - 3 </a>
+            <a href="Project Image/Image -  4.PNG" download>Download Image - 4 </a>
+            <a href="Project Image/Image -  5.PNG" download>Download Image - 5 </a>
+            <a href="Project Image/Image -  6.PNG" download>Download Image - 6 </a>
+            <a href="Project Image/Image -  7.PNG" download>Download Image - 7 </a>
+            </li>
+        </ol>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 My Projects</p>
+    </footer>
+</body>
+</html>
