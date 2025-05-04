@@ -111,65 +111,29 @@
             50% { opacity: 0; }
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
             position: absolute;
             top: 30px;
             right: 20px;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-
-        .theme-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--toggle-background);
-            border-radius: 30px;
-            transition: .4s;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: var(--toggle-button);
-            border-radius: 50%;
-            transition: .4s;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-
-        .toggle-icon {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-color);
             font-size: 14px;
-            pointer-events: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        .sun-icon {
-            left: 8px;
+        .theme-toggle-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
         }
 
-        .moon-icon {
-            right: 8px;
+        .theme-toggle-btn:active {
+            transform: translateY(0);
         }
 
         /* Main Content */
@@ -376,9 +340,11 @@
                 font-size: 1.5rem;
             }
 
-            .theme-toggle {
+            .theme-toggle-btn {
                 top: 20px;
                 right: 15px;
+                padding: 6px 12px;
+                font-size: 12px;
             }
         }
     </style>
@@ -395,13 +361,7 @@
                 </div>
             </div>
             
-            <label class="theme-toggle">
-                <input type="checkbox" id="theme-toggle">
-                <span class="slider">
-                    <span class="toggle-icon sun-icon">☀️</span>
-                    <span class="toggle-icon moon-icon">🌙</span>
-                </span>
-            </label>
+            <button id="theme-toggle-btn" class="theme-toggle-btn">Toggle Theme</button>
         </header>
 
         <main>
@@ -517,24 +477,27 @@
 
     <script>
         // Theme Toggle Functionality
-        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const body = document.body;
+        let isDarkTheme = false;
 
         // Check for saved theme preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
             body.classList.add('dark-theme');
-            themeToggle.checked = true;
+            isDarkTheme = true;
         }
 
         // Theme toggle event listener
-        themeToggle.addEventListener('change', function() {
-            if (this.checked) {
+        themeToggleBtn.addEventListener('click', function() {
+            if (!isDarkTheme) {
                 body.classList.add('dark-theme');
                 localStorage.setItem('theme', 'dark');
+                isDarkTheme = true;
             } else {
                 body.classList.remove('dark-theme');
                 localStorage.setItem('theme', 'light');
+                isDarkTheme = false;
             }
         });
 
