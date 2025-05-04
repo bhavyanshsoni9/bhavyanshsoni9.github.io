@@ -181,24 +181,30 @@
             position: absolute;
             top: 30px;
             right: 20px;
+            width: 40px;
+            height: 40px;
             background-color: var(--accent-color);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
         }
 
         .theme-toggle-btn:hover {
             background-color: var(--primary-color);
-            transform: translateY(-2px);
+            transform: translateY(-3px) rotate(15deg);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .theme-toggle-btn:active {
-            transform: translateY(0);
+            transform: translateY(0) rotate(0);
         }
 
         /* Main Content */
@@ -717,10 +723,11 @@
             }
 
             .theme-toggle-btn {
-                top: 20px;
+                top: 15px;
                 right: 15px;
-                padding: 6px 12px;
-                font-size: 12px;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -747,7 +754,9 @@
                 </ul>
             </nav>
             
-            <button id="theme-toggle-btn" class="theme-toggle-btn">Toggle Theme</button>
+            <button id="theme-toggle-btn" class="theme-toggle-btn">
+                <span id="theme-icon">🌙</span>
+            </button>
         </header>
 
         <main>
@@ -844,6 +853,118 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Weather Dashboard</h3>
+                            <p class="project-description">
+                                Real-time weather application with forecasts, location tracking, and customizable alerts for weather changes.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">API</span>
+                                <span class="project-tag">React</span>
+                                <span class="project-tag">Geolocation</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Social Media Dashboard</h3>
+                            <p class="project-description">
+                                A comprehensive dashboard for tracking and managing social media metrics across multiple platforms.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">Vue.js</span>
+                                <span class="project-tag">Chart.js</span>
+                                <span class="project-tag">OAuth</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Recipe Finder</h3>
+                            <p class="project-description">
+                                Discover and save recipes based on available ingredients, dietary restrictions, and meal preferences.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">React</span>
+                                <span class="project-tag">Firebase</span>
+                                <span class="project-tag">REST API</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Fitness Tracker</h3>
+                            <p class="project-description">
+                                Personal fitness application for tracking workouts, nutrition, and progress with data visualization.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">Angular</span>
+                                <span class="project-tag">TypeScript</span>
+                                <span class="project-tag">Firebase</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Budget Planner</h3>
+                            <p class="project-description">
+                                Financial management tool with expense tracking, budget planning, and saving goals visualization.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">JavaScript</span>
+                                <span class="project-tag">IndexedDB</span>
+                                <span class="project-tag">PWA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">AI Image Generator</h3>
+                            <p class="project-description">
+                                Creative tool using machine learning to generate unique images based on text descriptions.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">Python</span>
+                                <span class="project-tag">TensorFlow</span>
+                                <span class="project-tag">Flask</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Language Learning App</h3>
+                            <p class="project-description">
+                                Interactive application for language learning with flashcards, pronunciation practice, and progress tracking.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">React Native</span>
+                                <span class="project-tag">Redux</span>
+                                <span class="project-tag">TTS API</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Podcast Platform</h3>
+                            <p class="project-description">
+                                Audio streaming platform for podcast creators and listeners with subscription and comment features.
+                            </p>
+                            <div class="project-tags">
+                                <span class="project-tag">Node.js</span>
+                                <span class="project-tag">Express</span>
+                                <span class="project-tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -910,6 +1031,7 @@
     <script>
         // Theme Toggle Functionality
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeIcon = document.getElementById('theme-icon');
         const body = document.body;
         let isDarkTheme = false;
 
@@ -918,6 +1040,9 @@
         if (savedTheme === 'dark') {
             body.classList.add('dark-theme');
             isDarkTheme = true;
+            themeIcon.textContent = '☀️'; // Sun icon for dark mode
+        } else {
+            themeIcon.textContent = '🌙'; // Moon icon for light mode
         }
 
         // Theme toggle event listener
@@ -926,10 +1051,12 @@
                 body.classList.add('dark-theme');
                 localStorage.setItem('theme', 'dark');
                 isDarkTheme = true;
+                themeIcon.textContent = '☀️'; // Switch to sun icon
             } else {
                 body.classList.remove('dark-theme');
                 localStorage.setItem('theme', 'light');
                 isDarkTheme = false;
+                themeIcon.textContent = '🌙'; // Switch to moon icon
             }
         });
 
