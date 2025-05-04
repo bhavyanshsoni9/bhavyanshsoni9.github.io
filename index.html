@@ -75,6 +75,71 @@
         .header-content {
             width: 100%;
             max-width: 800px;
+            margin-bottom: 30px;
+        }
+        
+        /* Navigation Styles */
+        .main-nav {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            color: var(--primary-color);
+            background-color: var(--background-secondary);
+            border-radius: 30px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            z-index: 1;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .nav-link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: var(--accent-color);
+            transition: all 0.4s ease;
+            z-index: -1;
+            border-radius: 30px;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            text-decoration: none;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow-color);
+        }
+        
+        .nav-link:hover:before {
+            width: 100%;
+        }
+        
+        .nav-link.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .nav-link.active:hover {
+            transform: translateY(-3px);
         }
 
         .name {
@@ -147,6 +212,14 @@
             background-color: var(--background-secondary);
             border-radius: 10px;
             box-shadow: 0 4px 12px var(--shadow-color);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+        
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .section-title {
@@ -194,7 +267,14 @@
             border-radius: 50px;
             font-size: 0.9rem;
             font-weight: 500;
-            transition: transform 0.3s;
+            transition: transform 0.3s, opacity 0.5s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .skill-tag.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .skill-tag:hover {
@@ -213,7 +293,14 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 8px var(--shadow-color);
-            transition: transform 0.3s;
+            transition: transform 0.3s, opacity 0.5s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .project-card:hover {
@@ -251,6 +338,12 @@
         }
 
         /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
         .contact-info {
             display: flex;
             flex-direction: column;
@@ -261,6 +354,11 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateX(5px);
         }
 
         .contact-icon {
@@ -271,6 +369,85 @@
         .contact-text {
             font-size: 1.1rem;
             color: var(--primary-color);
+        }
+        
+        /* Contact Form */
+        .contact-form-container {
+            background-color: var(--background-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .form-group label {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid var(--shadow-color);
+            border-radius: 5px;
+            background-color: var(--background-secondary);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+        
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .form-message {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Footer */
@@ -361,6 +538,16 @@
                 </div>
             </div>
             
+            <nav class="main-nav">
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
+                    <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+                    <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
+                    <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
+                    <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+                </ul>
+            </nav>
+            
             <button id="theme-toggle-btn" class="theme-toggle-btn">Toggle Theme</button>
         </header>
 
@@ -446,14 +633,43 @@
 
             <section id="contact">
                 <h2 class="section-title">Contact</h2>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <span class="contact-icon">✉️</span>
-                        <a href="mailto:bhavyanshsoni9@gmail.com" class="contact-text">bhavyanshsoni9@gmail.com</a>
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="contact-icon">✉️</span>
+                            <a href="mailto:bhavyanshsoni9@gmail.com" class="contact-text">bhavyanshsoni9@gmail.com</a>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <span class="contact-text">Rajasthan, India</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📱</span>
+                            <span class="contact-text">Available for freelance work</span>
+                        </div>
                     </div>
-                    <div class="contact-item">
-                        <span class="contact-icon">📍</span>
-                        <span class="contact-text">Rajasthan, India</span>
+                    
+                    <div class="contact-form-container">
+                        <form id="contact-form" class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
+                        <div id="form-message" class="form-message"></div>
                     </div>
                 </div>
             </section>
@@ -543,6 +759,105 @@
         window.onload = function() {
             setTimeout(typeWriter, 1000);
         };
+        
+        // Navigation active state based on scroll position
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        function setActiveNavLink() {
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 200)) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const linkSection = link.getAttribute('data-section');
+                if (linkSection === 'home' && currentSection === '') {
+                    link.classList.add('active');
+                } else if (linkSection === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // Smooth scrolling for navigation links
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Reset all links
+                navLinks.forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                
+                // Set clicked link as active
+                this.classList.add('active');
+                
+                const targetSection = this.getAttribute('href');
+                if (targetSection === '#') {
+                    // Scroll to top for Home
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    const section = document.querySelector(targetSection);
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Update active link on scroll
+        window.addEventListener('scroll', setActiveNavLink);
+        
+        // Set initial active link
+        setActiveNavLink();
+        
+        // Section reveal on scroll animation
+        function revealSections() {
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (sectionTop < windowHeight - 100) {
+                    section.classList.add('visible');
+                    
+                    // Animate skill tags with staggered delay if skills section
+                    if (section.id === 'skills') {
+                        const skillTags = section.querySelectorAll('.skill-tag');
+                        skillTags.forEach((tag, index) => {
+                            setTimeout(() => {
+                                tag.classList.add('visible');
+                            }, 100 * index);
+                        });
+                    }
+                    
+                    // Animate project cards with staggered delay if projects section
+                    if (section.id === 'projects') {
+                        const projectCards = section.querySelectorAll('.project-card');
+                        projectCards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('visible');
+                            }, 200 * index);
+                        });
+                    }
+                }
+            });
+        }
+        
+        // Run section reveal on initial load
+        revealSections();
+        
+        // Run section reveal on scroll
+        window.addEventListener('scroll', revealSections);
     </script>
 </body>
 </html>
